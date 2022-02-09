@@ -2,11 +2,13 @@ GEM
   remote: https://rubygems.org/
   specs:
     armor (0.0.3)
+    coderay (1.1.3)
     cuba (3.9.3)
       rack (>= 1.6.0)
     cuba-contrib (3.1.0)
       cuba (~> 3.1)
     hiredis (0.6.3)
+    method_source (1.0.0)
     mote (1.3.1)
     nest (3.2.0)
       redic
@@ -16,6 +18,9 @@ GEM
       stal
     ohm-contrib (3.0.0)
       ohm (~> 3.0)
+    pry (0.14.1)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
@@ -39,6 +44,7 @@ DEPENDENCIES
   mote
   ohm
   ohm-contrib
+  pry
   rack-protection
   scrivener
   scrivener_errors

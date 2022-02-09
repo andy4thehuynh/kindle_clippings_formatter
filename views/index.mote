@@ -1,1 +1,16 @@
-<p>Index reporting for duty</p>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Highlights</th>
+    </tr>
+  </thead>
+  <tbody>
+    % locals[:books].each_with_index do |book, index|
+      <tr class="{{ index % 2 == 0 ? "table-success" : "table-secondary" }}">
+        <td>{{ book.title }}</td>
+        <td>{{ book.highlights.length }}</td>
+      </tr>
+    % end
+  </tbody>
+</table>

@@ -1,3 +1,5 @@
+require "pry"
+
 require "cuba"
 require "cuba/contrib"
 require "mote"
@@ -33,10 +35,62 @@ Cuba.use Rack::Static,
   root: "./public",
   urls: %w[/js /css /img]
 
+
+# block_delimiter = "==========" 
+
+
 Cuba.define do
   persist_session!
 
   on root do
-    render('index')
+    class Book
+      attr_reader :title
+
+      def initialize(title)
+        @title = title
+      end
+
+      def create_highlight(title, location, text)
+        highlights << Struct::Highlight.new(title, location, text)
+      end
+
+      def highlights
+        @highlights ||= []
+      end
+    end
+
+    Struct.new("Highlight", :title, :location, :text) do
+    end
+
+    text = File.read(File.expand_path("~/Code/kindle_clippings_formatter/My Clippings.txt"))
+    text = text.gsub!("\xEF\xBB\xBF", "")
+    highlights = text.split("\r\n==========\r\n")
+
+    book_titles = highlights.map { |h| h.split("\r\n") }.map(&:first).uniq
+
+
+    books = book_titles.map do |title|
+      Book.new(title)
+    end
+
+    highlights.map do |highlight|
+      title, location, text = highlight.split("\r\n", 3)  
+
+      books.each do |book|
+        if book.title == title
+          book.create_highlight(title, location, text)
+        else
+        end
+      end 
+    end
+
+    render("index", locals: { books: books, book_titles: book_titles })
   end
 end
+
+# File.open(File.expand_path("~/Downloads/new_target.txt"), "wb") { |f| f.write(contents.join())  }
+
+# binding.pry
+# 
+# contents = blocks.map { |block| [block[0].prepend("### "), block[1]].join() }
+# contents.shift

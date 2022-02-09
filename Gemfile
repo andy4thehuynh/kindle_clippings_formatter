@@ -11,5 +11,6 @@ gem "scrivener_errors"
 gem "shield"
 
 group :development do
+  gem "pry"
   gem "shotgun"
 end
