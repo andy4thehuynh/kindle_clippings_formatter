@@ -36,73 +36,19 @@ Cuba.use Rack::Static,
   urls: %w[/js /css /img]
 
 
-# block_delimiter = "==========" 
+Ohm.redis = Redic.new("redis://127.0.0.1:6379")
 
 
 Cuba.define do
   persist_session!
 
   on root do
-    class Book
-      attr_reader :title
+    render("index", locals: { books: Book.all.sort_by(:title, order: "ALPHA") })
+  end
 
-      def initialize(title)
-        @title = title
-      end
-
-      def create_highlight(title, location, text)
-        highlights << Highlight.new(title, location, text)
-      end
-
-      def highlights
-        @highlights ||= []
-      end
-    end
-
-    class Highlight
-      include Comparable
-
-      attr_accessor :title, :raw_location, :text, :starting_location
-
-      def initialize(title, raw_location, text)
-        @title        = title
-        @raw_location = raw_location
-        @text         = text
-        str_beg = "- Your Highlight on Location"
-        str_end = " "
-
-        @starting_location, @ending_location = raw_location.split(str_beg).last.split(str_end).first.split("-")
-      end
-
-      def <=>(other)
-        starting_location <=> other.staring_location
-      end
-    end
-
-    text = File.read(File.expand_path("~/Code/kindle_clippings_formatter/My Clippings.txt"))
-    text = text.gsub!("\xEF\xBB\xBF", "")
-    highlights = text.split("\r\n==========\r\n")
-
-    book_titles = highlights.map { |h| h.split("\r\n") }.map(&:first).uniq
-
-
-    books = book_titles.map do |title|
-      Book.new(title)
-    end
-
-    highlights.map do |highlight|
-      title, location, text = highlight.split("\r\n", 3)  
-
-      books.each do |book|
-        if book.title == title
-          book.create_highlight(title, location, text)
-        else
-        end
-      end 
-    end
-    binding.pry
-
-    render("index", locals: { books: books, book_titles: book_titles })
+  on "book/:id" do |id|
+    book = Book[id]
+    render("books/show", locals: { book: book })
   end
 end
 

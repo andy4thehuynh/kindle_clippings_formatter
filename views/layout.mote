@@ -17,10 +17,6 @@
       {{ this.partial('notices', session: this.session) }}
       % end
 
-      <div class="row">
-        <h1>Kindle Clippings Formatter</h1>
-      </div>
-
       {{ content }}
     </div>
 

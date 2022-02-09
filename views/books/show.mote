@@ -1,0 +1,4 @@
+<div class="row">
+  <h2>{{ locals[:book].title }}</h2>
+</div>
+
