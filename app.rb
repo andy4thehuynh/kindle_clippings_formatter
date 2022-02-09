@@ -51,7 +51,7 @@ Cuba.define do
       end
 
       def create_highlight(title, location, text)
-        highlights << Struct::Highlight.new(title, location, text)
+        highlights << Highlight.new(title, location, text)
       end
 
       def highlights
@@ -59,7 +59,24 @@ Cuba.define do
       end
     end
 
-    Struct.new("Highlight", :title, :location, :text) do
+    class Highlight
+      include Comparable
+
+      attr_accessor :title, :raw_location, :text, :starting_location
+
+      def initialize(title, raw_location, text)
+        @title        = title
+        @raw_location = raw_location
+        @text         = text
+        str_beg = "- Your Highlight on Location"
+        str_end = " "
+
+        @starting_location, @ending_location = raw_location.split(str_beg).last.split(str_end).first.split("-")
+      end
+
+      def <=>(other)
+        starting_location <=> other.staring_location
+      end
     end
 
     text = File.read(File.expand_path("~/Code/kindle_clippings_formatter/My Clippings.txt"))
@@ -83,6 +100,7 @@ Cuba.define do
         end
       end 
     end
+    binding.pry
 
     render("index", locals: { books: books, book_titles: book_titles })
   end
