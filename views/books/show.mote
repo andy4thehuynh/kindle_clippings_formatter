@@ -7,8 +7,7 @@
 <div class="container">
   <div class="row">
     % book.highlights.each do |highlight|
-      <span>- {{ highlight.text }}</span>
-      <span>- {{ highlight.location }}</span>
+      <p>{{ highlight.text }}<br/>{{ highlight.display_location }}</p>
     % end
   </div>
 </div>

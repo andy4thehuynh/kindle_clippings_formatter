@@ -43,7 +43,7 @@ Cuba.define do
   persist_session!
 
   on root do
-    render("index", locals: { books: Book.all.sort_by(:title, order: "ALPHA") })
+    render("index", locals: { books: Book.all })
   end
 
   on "book/:id" do |id|
@@ -51,10 +51,3 @@ Cuba.define do
     render("books/show", locals: { book: book })
   end
 end
-
-# File.open(File.expand_path("~/Downloads/new_target.txt"), "wb") { |f| f.write(contents.join())  }
-
-# binding.pry
-# 
-# contents = blocks.map { |block| [block[0].prepend("### "), block[1]].join() }
-# contents.shift

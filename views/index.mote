@@ -1,22 +1,32 @@
+% books = locals[:books]
+
 <div class="row">
   <h2>Kindle Clippings Formatter</h2>
 </div>
 
-<div class="row">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Highlights</th>
-      </tr>
-    </thead>
-    <tbody>
-      % locals[:books].each_with_index do |book, index|
-        <tr class="{{ index % 2 == 0 ? "table-success" : "table-secondary" }}">
-          <td><a href="/book/{{ book.id }}" class="link-primary">{{ book.title }}</a></td>
-          <td>{{ book.highlights.size }}</td>
+% if books.size.zero?
+  <div class="row">
+    <p>Upload a Clippings.txt file</p>
+  </div>
+% else
+  % ordered_books = books.sort_by(:title, order: "ALPHA")
+
+  <div class="row">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Highlights</th>
         </tr>
-      % end
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        % ordered_books.each_with_index do |book, index|
+          <tr class="{{ index % 2 == 0 ? "table-success" : "table-secondary" }}">
+            <td><a href="/book/{{ book.id }}" class="link-primary">{{ book.title }}</a></td>
+            <td>{{ book.highlights.size }}</td>
+          </tr>
+        % end
+      </tbody>
+    </table>
+  </div>
+% end
