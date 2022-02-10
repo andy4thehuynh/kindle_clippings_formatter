@@ -1,4 +1,14 @@
+% book = locals[:book] || NullBook.new
+
 <div class="row">
-  <h2>{{ locals[:book].title }}</h2>
+  <h2>{{ book.title }}</h2>
 </div>
 
+<div class="container">
+  <div class="row">
+    % book.highlights.each do |highlight|
+      <span>- {{ highlight.text }}</span>
+      <span>- {{ highlight.location }}</span>
+    % end
+  </div>
+</div>
